@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+    int data;
+    struct Node* prev;
+    struct Node* next;
+};
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed\n");
+        exit(1);
+    }
+    newNode->data = data;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;
+}
+void insertAtEnd(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+    struct Node* current = *head;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+    current->next = newNode;
+    newNode->prev = current;
+}
+struct Node* search(struct Node* head, int target) {
+    struct Node* current = head;
+    while (current != NULL) {
+        if (current->data == target) {
+            return current; 
+        }
+        current = current->next;
+    }
+    return NULL; 
+}
+int main() {
+    struct Node* head = NULL;
+ insertAtEnd(&head, 1);
+    insertAtEnd(&head, 2);
+    insertAtEnd(&head, 3);
+    int target = 2;
+    struct Node* result = search(head, target);
+    if (result != NULL) {
+        printf("Item %d found in the list\n", target);
+    } else {
+        printf("Item %d not found in the list\n", target);
+    }
+    return 0;
+}
