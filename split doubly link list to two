@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+    int data;
+    struct Node* prev;
+    struct Node* next;
+};
+void append(struct Node** head_ref, int new_data) {
+    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+    struct Node* last = *head_ref;
+    new_node->data = new_data;
+    new_node->next = NULL;
+    if (*head_ref == NULL) {
+        new_node->prev = NULL;
+        *head_ref = new_node;
+        return;
+    }
+    while (last->next != NULL)
+        last = last->next;
+    last->next = new_node;
+    new_node->prev = last;
+}
+struct Node* splitList(struct Node** head_ref) {
+    struct Node* fast_ptr = *head_ref;
+    struct Node* slow_ptr = *head_ref;
+    while (fast_ptr->next != NULL && fast_ptr->next->next != NULL) {
+        fast_ptr = fast_ptr->next->next;
+        slow_ptr = slow_ptr->next;
+    }
+    struct Node* middle = slow_ptr->next;
+    slow_ptr->next = NULL;
+    middle->prev = NULL;
+    return middle;
+}
+void printList(struct Node* node) {
+    while (node != NULL) {
+        printf("%d ", node->data);
+        node = node->next;
+    }
+}
+int main() {
+    struct Node* head = NULL;
+append(&head, 1);
+    append(&head, 2);
+    append(&head, 3);
+    append(&head, 4);
+    append(&head, 5);
+    struct Node* second_half = splitList(&head);
+    printf("First Half: ");
+    printList(head);
+    printf("\nSecond Half: ");
+    printList(second_half);
+    return 0;
+}
