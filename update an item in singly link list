@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+    int data;
+    struct Node* next;
+};
+void updateItem(struct Node* head, int oldData, int newData) {
+    struct Node* current = head;
+    while (current != NULL) {
+        if (current->data == oldData) {
+            current->data = newData;
+            return; 
+        }
+        current = current->next;
+    }
+    printf("Item %d not found in the list.\n", oldData);
+}
+int main() {
+    struct Node* head = NULL;
+    struct Node* second = NULL;
+    struct Node* third = NULL;
+head = (struct Node*)malloc(sizeof(struct Node));
+    second = (struct Node*)malloc(sizeof(struct Node));
+    third = (struct Node*)malloc(sizeof(struct Node));
+    head->data = 1;
+    head->next = second;
+    second->data = 2;
+    second->next = third;
+    third->data = 3;
+    third->next = NULL;
+    updateItem(head, 2, 20);
+    struct Node* current = head;
+    while (current != NULL) {
+        printf("%d ", current->data);
+        current = current->next;
+    }
+    return 0;
+}
