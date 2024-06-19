@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <stdlib.h>
+void concatenateArrays(int arr1[], int n1, int arr2[], int n2, int result[]) {
+    // Copy elements of arr1 into result
+    for (int i = 0; i < n1; i++) {
+        result[i] = arr1[i];
+    }
+    for (int i = 0; i < n2; i++) {
+        result[n1 + i] = arr2[i];
+    }
+}
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+int main() {
+    int arr1[] = {1, 2, 3, 4, 5};
+    int arr2[] = {6, 7, 8, 9, 10};
+    int n1 = sizeof(arr1) / sizeof(arr1[0]);
+    int n2 = sizeof(arr2) / sizeof(arr2[0]);
+    int* result = (int*)malloc((n1 + n2) * sizeof(int));
+    if (result == NULL) {
+        printf("Memory allocation failed\n");
+        return 1;
+    }
+    concatenateArrays(arr1, n1, arr2, n2, result);
+    printf("Concatenated array: \n");
+    printArray(result, n1 + n2);
+    free(result);
+    return 0;
+}
