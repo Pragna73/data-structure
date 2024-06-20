@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+    int data;
+    struct Node* next;
+};
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+void insertAtBeginning(struct Node** head_ref, int new_data) {
+    struct Node* newNode = createNode(new_data);
+    newNode->next = *head_ref;
+    *head_ref = newNode;
+}
+void insertAtEnd(struct Node** head_ref, int new_data) {
+    struct Node* newNode = createNode(new_data);
+    if (*head_ref == NULL) {
+        *head_ref = newNode;
+        return;
+    }
+    struct Node* last = *head_ref;
+    while (last->next != NULL) {
+        last = last->next;
+    }
+    last->next = newNode;
+}
+void insertAfterNode(struct Node* prev_node, int new_data) {
+    if (prev_node == NULL) {
+        printf("The given previous node cannot be NULL");
+        return;
+    }
+    struct Node* newNode = createNode(new_data);
+    newNode->next = prev_node->next;
+    prev_node->next = newNode;
+}
+void insertBeforeNode(struct Node** head_ref, struct Node* next_node, int new_data) {
+    if (*head_ref == NULL || next_node == NULL) {
+        printf("The given next node cannot be NULL");
+        return;
+    }
+    struct Node* newNode = createNode(new_data);
+    if (*head_ref == next_node) {
+        newNode->next = *head_ref;
+        *head_ref = newNode;
+        return;
+    }
+    struct Node* prev = NULL;
+    struct Node* current = *head_ref;
+    while (current != NULL && current != next_node) {
+        prev = current;
+        current = current->next;
+    }
+    if (current == NULL) {
+        printf("The given next node is not present in the list");
+        return;
+    }
+    prev->next = newNode;
+    newNode->next = current;
+}
+
+// Function to print the linked list
+void printList(struct Node* node) {
+    while (node != NULL) {
+        printf("%d -> ", node->data);
+        node = node->next;
+    }
+    printf("NULL\n");
+}
+int main() {
+    struct Node* head = NULL;
+    insertAtEnd(&head, 6);
+    insertAtBeginning(&head, 7);
+    insertAtBeginning(&head, 1);
+    insertAtEnd(&head, 4);
+    insertAfterNode(head->next, 8);
+    printf("Linked list after insertions: ");
+    printList(head);
+    insertBeforeNode(&head, head->next, 5);
+    printf("Linked list after inserting 5 before the second node: ");
+    printList(head);
+    return 0;
+}
