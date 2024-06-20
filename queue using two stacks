@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct StackNode {
+    int data;
+    struct StackNode* next;
+};
+struct StackNode* createStackNode(int data) {
+    struct StackNode* newNode = (struct StackNode*)malloc(sizeof(struct StackNode));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+int isStackEmpty(struct StackNode* top) {
+    return !top;
+}
+void push(struct StackNode** top_ref, int data) {
+    struct StackNode* newNode = createStackNode(data);
+    newNode->next = *top_ref;
+    *top_ref = newNode;
+}
+int pop(struct StackNode** top_ref) {
+    if (isStackEmpty(*top_ref)) {
+        printf("Stack Underflow\n");
+        exit(0);
+    }
+    struct StackNode* temp = *top_ref;
+    *top_ref = (*top_ref)->next;
+    int popped = temp->data;
+    free(temp);
+    return popped;
+}
+struct Queue {
+    struct StackNode* stack1;
+    struct StackNode* stack2;
+};
+struct Queue* createQueue() {
+    struct Queue* queue = (struct Queue*)malloc(sizeof(struct Queue));
+    queue->stack1 = NULL;
+    queue->stack2 = NULL;
+    return queue;
+}
+void enqueue(struct Queue* queue, int data) {
+    push(&queue->stack1, data);
+}
+int dequeue(struct Queue* queue) {
+    if (isStackEmpty(queue->stack1) && isStackEmpty(queue->stack2)) {
+        printf("Queue Underflow\n");
+        exit(0);
+    }
+    if (isStackEmpty(queue->stack2)) {
+        while (!isStackEmpty(queue->stack1)) {
+            int data = pop(&queue->stack1);
+            push(&queue->stack2, data);
+        }
+    }
+    return pop(&queue->stack2);
+}
+int main() {
+    struct Queue* queue = createQueue();
+    enqueue(queue, 10);
+    enqueue(queue, 20);
+    enqueue(queue, 30);
+    printf("Dequeued element is %d\n", dequeue(queue));
+    printf("Dequeued element is %d\n", dequeue(queue));
+    printf("Dequeued element is %d\n", dequeue(queue));
+    return 0;
+}
