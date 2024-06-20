@@ -1,0 +1,80 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+    int data;
+    struct Node* next;
+    struct Node* prev;
+};
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    newNode->prev = NULL;
+    return newNode;
+}
+void insertAtBeginning(struct Node** head_ref, int new_data) {
+    struct Node* newNode = createNode(new_data);
+    newNode->next = *head_ref;
+    if (*head_ref != NULL) {
+        (*head_ref)->prev = newNode;
+    }
+    *head_ref = newNode;
+}
+void insertAtEnd(struct Node** head_ref, int new_data) {
+    struct Node* newNode = createNode(new_data);
+    struct Node* last = *head_ref;
+    if (*head_ref == NULL) {
+        *head_ref = newNode;
+        return;
+    }
+    while (last->next != NULL) {
+        last = last->next;
+    }
+    last->next = newNode;
+    newNode->prev = last;
+}
+void insertAfterNode(struct Node* prev_node, int new_data) {
+    if (prev_node == NULL) {
+        printf("The given previous node cannot be NULL\n");
+        return;
+    }
+    struct Node* newNode = createNode(new_data);
+    newNode->next = prev_node->next;
+    newNode->prev = prev_node;
+    if (prev_node->next != NULL) {
+        prev_node->next->prev = newNode;
+    }
+    prev_node->next = newNode;
+}
+void printListFromBeginning(struct Node* node) {
+    printf("Traversal in forward direction: ");
+    while (node != NULL) {
+        printf("%d -> ", node->data);
+        node = node->next;
+    }
+    printf("NULL\n");
+}
+void printListFromEnd(struct Node* node) {
+    while (node && node->next != NULL) {
+        node = node->next;
+    }
+    printf("Traversal in reverse direction: ");
+    while (node != NULL) {
+        printf("%d -> ", node->data);
+        node = node->prev;
+    }
+    printf("NULL\n");
+}
+int main() {
+    struct Node* head = NULL;
+    insertAtEnd(&head, 6);
+    insertAtBeginning(&head, 7);
+    insertAtBeginning(&head, 1);
+    insertAtEnd(&head, 4);
+    insertAfterNode(head->next, 8);
+    printf("Doubly linked list from the beginning: ");
+    printListFromBeginning(head);
+    printf("Doubly linked list from the end: ");
+    printListFromEnd(head);
+    return 0;
+}
