@@ -1,0 +1,32 @@
+#include <stdio.h>
+int main() {
+    int n;
+    printf("Enter the number of elements in the array: ");
+    scanf("%d", &n);
+    int array[n];
+    printf("Enter the elements of the array:\n");
+    for (int i = 0; i < n; i++) {
+        printf("Element [%d]: ", i);
+        scanf("%d", &array[i]);
+    }
+    int visited[n];
+    for (int i = 0; i < n; i++) {
+        visited[i] = 0;
+    }
+    printf("Elements repeated exactly twice:\n");
+    for (int i = 0; i < n; i++) {
+        if (visited[i] == 0) {
+            int count = 1;
+            for (int j = i + 1; j < n; j++) {
+                if (array[i] == array[j]) {
+                    count++;
+                    visited[j] = 1;
+                }
+            }
+            if (count == 2) {
+                printf("%d\n", array[i]);
+            }
+        }
+    }
+    return 0;
+}
